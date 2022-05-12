@@ -1,24 +1,55 @@
-# app
+ ## 3/20
+  - 初始化脚手架 `vue init webpack 项目的名字`
+  - 在vue.config.js中关闭eslint
+  - 在jsconfig.json文件中设置scr的别名
+  - 安装less-loader@5插件
+  - 安装vue-router
+  
+ ## 3/21
+  - 将Header与Footer等非路由组件,拆分到components公共文件夹中
+  - 创建路由文件夹router,对需要变化的组件进行路由配置
+  - 将Home组件进行拆分(图片,样式,结构)
+  - 设置代理服务器
+  - 安装axios
+  - 将axios进行二次封装
+    - 在发送请求之前执行...(请求拦截器)
+    - 在响应回来之前执行...(响应拦截器)
 
-## Project setup
-```
-npm install
-```
+ ## 3/22
+  - 安装vuex
+  - 给服务器发送请求,将数据保存在vuex的home模块中
+  - 将商品分类三级联动展示动态数据
+  - 给一级,二级,三级界面添加不同的自定义属性,这样就可以知道点击的是哪一级
+  - 通过js实现三级联动的hover效果
+  - 防抖与节流
+  - 引入lodash,进行防抖与节流
+  - 三级分类不应使用router-link,数据太多会导致卡顿,因此采用编程式导航
+  - 在三级联动中,因为数据是从服务器中请求的,界面挂载时,数据可能还没有返回,因此需要通过watch来监视这个数据,再执行nextTick来更新界面
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+ ## 3/23
+  - 利用vue中的过渡,给search模块的三级联动添加抽屉效果
+  - 复习点:
+    - 将频繁使用的组件注册为全局组件,即可任意地方使用
+    - 将公共的全局组件放置于components文件夹中
+    - 注册全局组件在main.js入口文件中注册
+  - 将三级联动的组件拆分为全局组件
+  - 引入mockjs用于以请求的方式发送假数据给项目,模拟开发情况,创建一个mock文件夹,专门放置假数据,再到main.js中引入
+  - 轮播图:通过swiper插件实现
+  - 将轮播图组件拆分出来(carousel.vue),通过props传递参数
 
-### Compiles and minifies for production
-```
-npm run build
-```
+ ## 3/24 
+  - 将search模块拆分成组件, 封装了reqGetSearchInfo的axios模块, 在search模块中mounted生命周期中 执行$dispatch, 访问服务器获取请求,如果请求的code是200就向mutations执行保存数据,然后在组件中computed使用mapState方法,将state数据导过来对界面进行遍历展示即可,但是现在传递的是一个空对象.服务器需要接收一个有数据的对象,来进行对应的反馈
 
-### Lints and fixes files
-```
-npm run lint
-```
+  - 在展示的时候,因为数据是从服务器动态获取的,可能有各种原因导致数据没有传递过来,导致报错, 因此在保存数据的时候 `state.searchList.attrsList || []`
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+  - 给服务器请求数据的方法添加参数,需要传递的参数通过路径获取,执行`Object.assign`合并给源对象进行传递
+  
+  - 将商品分类和商品item展示进行拆分组件和for遍历渲染
+
+
+ ## 3/25 
+  - 当前search模块存在一个问题,第一次是在mounted中发了一次请求,接下来的任何操作都不会再次发请求,如何解决?
+    - 监听search组件中$route的属性变化即可,因为一旦搜索,路由肯定会变化.
+  - 在执行发送ajax请求之前,将三级联动的c1,c2,c3数据清空,因为有可能第一次点的是c1，第二次点的是c2，如果不清空，那么都会保存下来，会导致搜索错误
+  - 对面包屑 通过服务器的数据 进行显示隐藏处理,同时清空面包屑的同时，对应的删除路由参数(通过全局事件总线清空输入框)
+  - 点击商品,通过自定义事件,给兄弟组件传递事件,给'品牌信息'也添加进面包屑中

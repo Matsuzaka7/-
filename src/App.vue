@@ -1,28 +1,34 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <Header />
+    <!-- 路由组件出口的地方 -->
+    <router-view></router-view>
+    <!-- 在Home与Search可见的，但是Login|Register不可见 -->
+    <!-- 利用路由元信息解决当前问题好处：一行代码就可以解决 -->
+    <Footer v-show="$route.meta.isShow" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+//引入Header与Footer非路由组件
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 export default {
-  name: 'App',
+  name: "",
+  data() {
+    return {
+      msg: "abc"
+    }
+  },
   components: {
-    HelloWorld
-  }
-}
+    Header,
+    Footer,
+  },
+  mounted() {
+    //派发一个action||获取商品分类的三级列表的数据
+    this.$store.dispatch("getCategoryList");
+  },
+};
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style scoped></style>
